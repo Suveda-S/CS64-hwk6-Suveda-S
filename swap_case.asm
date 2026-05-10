@@ -93,7 +93,86 @@ Exit:
 # YOU CAN ONLY MODIFY THIS FILE FROM THIS POINT ONWARDS:
 SwapCase:
     #TODO: write your code here, $a0 stores the address of the string
+    addiu $sp, $sp, -16
+    sw $a0, 0($sp)
+    sw $ra, 4($sp)
+    sw $s0, 8($sp)
+    sw $s1, 12($sp)
+    #in asciiz 65 is A, 90 is Z, 97 is a, 122 is z
+    la $s0, 0($a0)
+StringLoop:
+    lb $t0, 0($s0)
+    beq $t0, $zero, endloop
+
+    slti $t1, $t0, 91
+    slti $t2, $t0, 65
+    bne $t1, $t2, isUpper
+
+    slti $t1, $t0, 123
+    slti $t2, $t0, 97
+    bne $t1, $t2, isLetter
+
+    j endround
+
+isUpper:
+    #if s1 is 1 its a upper case, if its 0, its a lower case
+    li $s1, 1
+
+isLetter:
+
+    lb $a0, 0($s0)
+    li $v0, 11
+    syscall
+
+    la $a0, newline
+    li $v0, 4
+    syscall
+
+    bne $s1, $zero, UpperPrint
+    lb $t0, 0($s0)
+    addi $t0, $t0, -32
+    sb $t0, 0($s0)
+    lb $a0, 0($s0)
+    li $v0, 11
+    syscall
+
+    la $a0, newline
+    li $v0, 4
+    syscall
+
+
+    j CallCheck
+
+UpperPrint:
+    lb $t0, 0($s0)
+    addi $t0, $t0, 32
+    sb $t0, 0($s0)
+    lb $a0, 0($s0)
+    li $v0, 11
+    syscall
+
+    la $a0, newline
+    li $v0, 4
+    syscall
+
+
+CallCheck:
+    jal ConventionCheck
     
+
+endround:
+    addi $s0, $s0, 1
+    li $s1, 0
+    j StringLoop
+
+endloop:
     # Do not remove the "jr $ra" line below!!!
     # It should be the last line in your function code!
+    lw $a0, 0($sp)
+    lw $ra, 4($sp)
+    lw $s0, 8($sp)
+    lw $s1, 12($sp)
+    addiu $sp, $sp, 16
     jr $ra
+
+    
