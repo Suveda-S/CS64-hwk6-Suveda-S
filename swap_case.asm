@@ -96,6 +96,8 @@ SwapCase:
     
     
     la $t3, 0($a0)
+    addiu $sp, $sp, -4
+    sw $a0, 0($sp)
 StringLoop:
     lb $t0, 0($t3)
     beq $t0, $zero, endloop
@@ -154,17 +156,15 @@ UpperPrint:
 
 
 CallCheck:
-    addiu $sp, $sp, -16
-    sw $a0, 0($sp)
-    sw $ra, 4($sp)
-    sw $t3, 8($sp)
-    sw $t4, 12($sp)
+    addiu $sp, $sp, -12
+    sw $ra, 0($sp)
+    sw $t3, 4($sp)
+    sw $t4, 8($sp)
     jal ConventionCheck
-    lw $a0, 0($sp)
-    lw $ra, 4($sp)
-    lw $t3, 8($sp)
-    lw $t4, 12($sp)
-    addiu $sp, $sp, 16
+    lw $ra, 0($sp)
+    lw $t3, 4($sp)
+    lw $t4, 8($sp)
+    addiu $sp, $sp, 12
 
 endround:
     addi $t3, $t3, 1
@@ -174,6 +174,9 @@ endround:
 endloop:
     # Do not remove the "jr $ra" line below!!!
     # It should be the last line in your function code!
+    lw $a0, 0($sp)
+    addiu $sp, $sp, 4
+    
     jr $ra
 
     
