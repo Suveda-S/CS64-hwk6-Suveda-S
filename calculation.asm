@@ -6,38 +6,42 @@
 #   make all returned values from functions go in $v0
 
 .text
-remove:
+remove: #a0 is a and a1 is b
     sub $v0, $a1, $a0
     jr $ra
 
 calc:
-    li $t1, 5
-    li $t0, 0
+    li $t1, 5 #t1 is z
+    li $t0, 0 #t0 is i
 
 calcloop:
-    bge $t0, $a2, endcalc
+    bge $t0, $a2, endcalc #a2 is n
+    #does z = z- x + 2y
     sll $t2, $a1, 1
     add $t1, $t2, $t1
     sub $t1, $t1, $a0
 
-    li $t2, 2
+    li $t2, 2 #only need for comparison
     blt $a0, $t2, calciffalse
 
-    addiu $sp, $sp, -20
+    #x, y, n, i, z, ra need to stay same through loops and calls 
+    addiu $sp, $sp, -24
     sw $a0, 0($sp)
     sw $a1, 4($sp)
     sw $a2, 8($sp)
-    sw $t1, 12($sp)
-    sw $ra, 16($sp)
+    sw $t0, 12($sp)
+    sw $t1, 16($sp)
+    sw $ra, 20($sp)
 
     jal remove
 
     lw $a0, 0($sp)
     lw $a1, 4($sp)
     lw $a2, 8($sp)
-    lw $t1, 12($sp)
-    lw $ra, 16($sp)
-    addiu $sp, $sp, 20
+    lw $t0, 12($sp)
+    lw $t1, 16($sp)
+    lw $ra, 20($sp)
+    addiu $sp, $sp, 24
 
     move $a1, $v0
 
