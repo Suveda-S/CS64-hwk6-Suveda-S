@@ -23,17 +23,21 @@ calcloop:
     li $t2, 2
     blt $a0, $t2, calciffalse
 
-    addiu $sp, $sp, -12
+    addiu $sp, $sp, -20
     sw $a0, 0($sp)
     sw $a1, 4($sp)
-    sw $ra, 8($sp)
+    sw $a2, 8($sp)
+    sw $t1, 12($sp)
+    sw $ra, 16($sp)
 
     jal remove
 
     lw $a0, 0($sp)
     lw $a1, 4($sp)
-    lw $ra, 8($sp)
-    addiu $sp, $sp, 12
+    lw $a2, 8($sp)
+    lw $t1, 12($sp)
+    lw $ra, 16($sp)
+    addiu $sp, $sp, 20
 
     move $a1, $v0
 
