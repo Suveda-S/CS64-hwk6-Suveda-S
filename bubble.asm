@@ -36,8 +36,8 @@ bubbleif:
     lw $t4, 0($t3)
     lw $t5, 0($t2)
     ble $t4, $t5, looptwocounter
-    sw $t4, 0($t3)
-    sw $t5, 0($t2)
+    sw $t5, 0($t3)
+    sw $t4, 0($t2)
     j looptwocounter
     
 looponeend:
@@ -60,7 +60,7 @@ printloop:
     li $v0, 1
     syscall
 
-    la $a0, newline
+    la $a0, space
     li $v0, 4
     syscall
 
